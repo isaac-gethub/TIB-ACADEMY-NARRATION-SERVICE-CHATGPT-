@@ -1,0 +1,1 @@
+module.exports=(req,res)=>{res.setHeader('Cache-Control','no-store');res.status(200).json({online:true,ready:Boolean(process.env.ELEVENLABS_API_KEY&&process.env.TIB_NARRATION_ADMIN_CODE)})}
