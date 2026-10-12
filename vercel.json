@@ -1,1 +1,16 @@
-{"version":2,"buildCommand":"node scripts/generate-test.js","outputDirectory":"public","functions":{"api/*.js":{"maxDuration":60}},"rewrites":[{"source":"/interactive-lab1","destination":"/lab01-interactive.html"}]}
+{
+  "version": 2,
+  "buildCommand": "node scripts/build-static.js",
+  "outputDirectory": "public",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/interactive-lab1",
+      "destination": "/lab01-interactive.html"
+    }
+  ]
+}
