@@ -1,0 +1,17 @@
+name: Phase 2 Static Regression
+on:
+  push:
+    branches: [phase2-enhancements-20261012]
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build static site without narration API
+        run: node scripts/build-static.js
+      - name: Check lab and narration assets
+        run: node scripts/qa-phase2.js
