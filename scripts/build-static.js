@@ -8,7 +8,7 @@ for(const file of fs.readdirSync(root)){
  if(/^lab\d{2}(?:-interactive)?\.html$/.test(file)||file==='index.html'||file==='trainee-skills-career-report.html'){
   // Keep repository source untouched. Some legacy interactive stages omit s.audio,
   // while their five MP3 recordings are indexed by stage position.
-  if(/-interactive\\.html$/.test(file)){
+  if(file.endsWith('-interactive.html')){
    let html=fs.readFileSync(path.join(root,file),'utf8');
    const stageStart=html.indexOf('const stages=');
    const stageEnd=html.indexOf('let i=',stageStart);
