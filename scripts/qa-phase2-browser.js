@@ -2,7 +2,7 @@
 const {chromium}=require('playwright');const {spawn}=require('child_process');
 (async()=>{const server=spawn('python3',['-m','http.server','8765','--directory','public'],{stdio:'ignore'});let browser;const results=[];try{
  await new Promise(r=>setTimeout(r,1500));browser=await chromium.launch({headless:true});
- for(const n of [1,2,13,14,16,17,19,37,42,44]){
+ for(let n=1;n<=46;n++){
   const id=String(n).padStart(2,'0'),context=await browser.newContext({acceptDownloads:true}),page=await context.newPage();
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const response=await page.goto('http://127.0.0.1:8765/lab'+id+'-interactive.html');
