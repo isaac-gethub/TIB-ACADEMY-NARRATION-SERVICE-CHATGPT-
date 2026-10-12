@@ -1,0 +1,475 @@
+[
+  {
+    "lab": 4,
+    "sections": 5,
+    "files": [
+      "lab04-section-1.mp3",
+      "lab04-section-2.mp3",
+      "lab04-section-3.mp3",
+      "lab04-section-4.mp3",
+      "lab04-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 5,
+    "sections": 5,
+    "files": [
+      "lab05-section-1.mp3",
+      "lab05-section-2.mp3",
+      "lab05-section-3.mp3",
+      "lab05-section-4.mp3",
+      "lab05-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 6,
+    "sections": 5,
+    "files": [
+      "lab06-section-1.mp3",
+      "lab06-section-2.mp3",
+      "lab06-section-3.mp3",
+      "lab06-section-4.mp3",
+      "lab06-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 7,
+    "sections": 5,
+    "files": [
+      "lab07-section-1.mp3",
+      "lab07-section-2.mp3",
+      "lab07-section-3.mp3",
+      "lab07-section-4.mp3",
+      "lab07-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 8,
+    "sections": 5,
+    "files": [
+      "lab08-section-1.mp3",
+      "lab08-section-2.mp3",
+      "lab08-section-3.mp3",
+      "lab08-section-4.mp3",
+      "lab08-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 9,
+    "sections": 5,
+    "files": [
+      "lab09-section-1.mp3",
+      "lab09-section-2.mp3",
+      "lab09-section-3.mp3",
+      "lab09-section-4.mp3",
+      "lab09-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 10,
+    "sections": 5,
+    "files": [
+      "lab10-section-1.mp3",
+      "lab10-section-2.mp3",
+      "lab10-section-3.mp3",
+      "lab10-section-4.mp3",
+      "lab10-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 11,
+    "sections": 5,
+    "files": [
+      "lab11-section-1.mp3",
+      "lab11-section-2.mp3",
+      "lab11-section-3.mp3",
+      "lab11-section-4.mp3",
+      "lab11-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 12,
+    "sections": 5,
+    "files": [
+      "lab12-section-1.mp3",
+      "lab12-section-2.mp3",
+      "lab12-section-3.mp3",
+      "lab12-section-4.mp3",
+      "lab12-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 13,
+    "sections": 5,
+    "files": [
+      "lab13-section-1.mp3",
+      "lab13-section-2.mp3",
+      "lab13-section-3.mp3",
+      "lab13-section-4.mp3",
+      "lab13-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 14,
+    "sections": 5,
+    "files": [
+      "lab14-section-1.mp3",
+      "lab14-section-2.mp3",
+      "lab14-section-3.mp3",
+      "lab14-section-4.mp3",
+      "lab14-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 15,
+    "sections": 5,
+    "files": [
+      "lab15-section-1.mp3",
+      "lab15-section-2.mp3",
+      "lab15-section-3.mp3",
+      "lab15-section-4.mp3",
+      "lab15-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 16,
+    "sections": 5,
+    "files": [
+      "lab16-section-1.mp3",
+      "lab16-section-2.mp3",
+      "lab16-section-3.mp3",
+      "lab16-section-4.mp3",
+      "lab16-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 17,
+    "sections": 5,
+    "files": [
+      "lab17-section-1.mp3",
+      "lab17-section-2.mp3",
+      "lab17-section-3.mp3",
+      "lab17-section-4.mp3",
+      "lab17-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 18,
+    "sections": 5,
+    "files": [
+      "lab18-section-1.mp3",
+      "lab18-section-2.mp3",
+      "lab18-section-3.mp3",
+      "lab18-section-4.mp3",
+      "lab18-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 19,
+    "sections": 5,
+    "files": [
+      "lab19-section-1.mp3",
+      "lab19-section-2.mp3",
+      "lab19-section-3.mp3",
+      "lab19-section-4.mp3",
+      "lab19-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 20,
+    "sections": 5,
+    "files": [
+      "lab20-section-1.mp3",
+      "lab20-section-2.mp3",
+      "lab20-section-3.mp3",
+      "lab20-section-4.mp3",
+      "lab20-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 21,
+    "sections": 5,
+    "files": [
+      "lab21-section-1.mp3",
+      "lab21-section-2.mp3",
+      "lab21-section-3.mp3",
+      "lab21-section-4.mp3",
+      "lab21-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 22,
+    "sections": 5,
+    "files": [
+      "lab22-section-1.mp3",
+      "lab22-section-2.mp3",
+      "lab22-section-3.mp3",
+      "lab22-section-4.mp3",
+      "lab22-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 23,
+    "sections": 5,
+    "files": [
+      "lab23-section-1.mp3",
+      "lab23-section-2.mp3",
+      "lab23-section-3.mp3",
+      "lab23-section-4.mp3",
+      "lab23-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 24,
+    "sections": 5,
+    "files": [
+      "lab24-section-1.mp3",
+      "lab24-section-2.mp3",
+      "lab24-section-3.mp3",
+      "lab24-section-4.mp3",
+      "lab24-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 25,
+    "sections": 5,
+    "files": [
+      "lab25-section-1.mp3",
+      "lab25-section-2.mp3",
+      "lab25-section-3.mp3",
+      "lab25-section-4.mp3",
+      "lab25-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 26,
+    "sections": 5,
+    "files": [
+      "lab26-section-1.mp3",
+      "lab26-section-2.mp3",
+      "lab26-section-3.mp3",
+      "lab26-section-4.mp3",
+      "lab26-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 27,
+    "sections": 5,
+    "files": [
+      "lab27-section-1.mp3",
+      "lab27-section-2.mp3",
+      "lab27-section-3.mp3",
+      "lab27-section-4.mp3",
+      "lab27-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 28,
+    "sections": 5,
+    "files": [
+      "lab28-section-1.mp3",
+      "lab28-section-2.mp3",
+      "lab28-section-3.mp3",
+      "lab28-section-4.mp3",
+      "lab28-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 29,
+    "sections": 5,
+    "files": [
+      "lab29-section-1.mp3",
+      "lab29-section-2.mp3",
+      "lab29-section-3.mp3",
+      "lab29-section-4.mp3",
+      "lab29-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 30,
+    "sections": 5,
+    "files": [
+      "lab30-section-1.mp3",
+      "lab30-section-2.mp3",
+      "lab30-section-3.mp3",
+      "lab30-section-4.mp3",
+      "lab30-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 31,
+    "sections": 5,
+    "files": [
+      "lab31-section-1.mp3",
+      "lab31-section-2.mp3",
+      "lab31-section-3.mp3",
+      "lab31-section-4.mp3",
+      "lab31-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 32,
+    "sections": 5,
+    "files": [
+      "lab32-section-1.mp3",
+      "lab32-section-2.mp3",
+      "lab32-section-3.mp3",
+      "lab32-section-4.mp3",
+      "lab32-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 33,
+    "sections": 5,
+    "files": [
+      "lab33-section-1.mp3",
+      "lab33-section-2.mp3",
+      "lab33-section-3.mp3",
+      "lab33-section-4.mp3",
+      "lab33-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 34,
+    "sections": 5,
+    "files": [
+      "lab34-section-1.mp3",
+      "lab34-section-2.mp3",
+      "lab34-section-3.mp3",
+      "lab34-section-4.mp3",
+      "lab34-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 35,
+    "sections": 5,
+    "files": [
+      "lab35-section-1.mp3",
+      "lab35-section-2.mp3",
+      "lab35-section-3.mp3",
+      "lab35-section-4.mp3",
+      "lab35-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 36,
+    "sections": 5,
+    "files": [
+      "lab36-section-1.mp3",
+      "lab36-section-2.mp3",
+      "lab36-section-3.mp3",
+      "lab36-section-4.mp3",
+      "lab36-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 37,
+    "sections": 5,
+    "files": [
+      "lab37-section-1.mp3",
+      "lab37-section-2.mp3",
+      "lab37-section-3.mp3",
+      "lab37-section-4.mp3",
+      "lab37-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 38,
+    "sections": 5,
+    "files": [
+      "lab38-section-1.mp3",
+      "lab38-section-2.mp3",
+      "lab38-section-3.mp3",
+      "lab38-section-4.mp3",
+      "lab38-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 39,
+    "sections": 5,
+    "files": [
+      "lab39-section-1.mp3",
+      "lab39-section-2.mp3",
+      "lab39-section-3.mp3",
+      "lab39-section-4.mp3",
+      "lab39-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 40,
+    "sections": 5,
+    "files": [
+      "lab40-section-1.mp3",
+      "lab40-section-2.mp3",
+      "lab40-section-3.mp3",
+      "lab40-section-4.mp3",
+      "lab40-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 41,
+    "sections": 5,
+    "files": [
+      "lab41-section-1.mp3",
+      "lab41-section-2.mp3",
+      "lab41-section-3.mp3",
+      "lab41-section-4.mp3",
+      "lab41-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 42,
+    "sections": 5,
+    "files": [
+      "lab42-section-1.mp3",
+      "lab42-section-2.mp3",
+      "lab42-section-3.mp3",
+      "lab42-section-4.mp3",
+      "lab42-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 43,
+    "sections": 5,
+    "files": [
+      "lab43-section-1.mp3",
+      "lab43-section-2.mp3",
+      "lab43-section-3.mp3",
+      "lab43-section-4.mp3",
+      "lab43-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 44,
+    "sections": 5,
+    "files": [
+      "lab44-section-1.mp3",
+      "lab44-section-2.mp3",
+      "lab44-section-3.mp3",
+      "lab44-section-4.mp3",
+      "lab44-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 45,
+    "sections": 5,
+    "files": [
+      "lab45-section-1.mp3",
+      "lab45-section-2.mp3",
+      "lab45-section-3.mp3",
+      "lab45-section-4.mp3",
+      "lab45-section-5.mp3"
+    ]
+  },
+  {
+    "lab": 46,
+    "sections": 5,
+    "files": [
+      "lab46-section-1.mp3",
+      "lab46-section-2.mp3",
+      "lab46-section-3.mp3",
+      "lab46-section-4.mp3",
+      "lab46-section-5.mp3"
+    ]
+  }
+]
