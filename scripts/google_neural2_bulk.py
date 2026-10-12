@@ -19,13 +19,13 @@ manifest = []
 for number in range(4, 47):
     lab = f"lab{number:02d}"
     source = urllib.request.urlopen(ROOT + lab + ".html", timeout=45).read().decode("utf-8")
-    matches = re.findall(r"<section\\b[^>]*>(.*?)</section>", source, re.S | re.I)
+    matches = re.findall(r"<section\b[^>]*>(.*?)</section>", source, re.S | re.I)
     if len(matches) != 5:
         raise RuntimeError(f"{lab}: expected five sections, got {len(matches)}")
     items = []
     for i, section in enumerate(matches, 1):
-        title_match = re.search(r"<h2\\b[^>]*>(.*?)</h2>", section, re.S | re.I)
-        text_match = re.search(r"<p\\b[^>]*>(.*?)</p>", section, re.S | re.I)
+        title_match = re.search(r"<h2\b[^>]*>(.*?)</h2>", section, re.S | re.I)
+        text_match = re.search(r"<p\b[^>]*>(.*?)</p>", section, re.S | re.I)
         if not title_match or not text_match:
             raise RuntimeError(f"{lab}: missing section heading or text {i}")
         clean = lambda s: html.unescape(re.sub(r"<[^>]*>", "", s)).strip()
