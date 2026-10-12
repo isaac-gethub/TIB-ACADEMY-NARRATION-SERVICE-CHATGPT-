@@ -15,3 +15,7 @@ jobs:
         run: node scripts/build-static.js
       - name: Check lab and narration assets
         run: node scripts/qa-phase2.js
+      - name: Install browser test runtime
+        run: npm install --no-save playwright && npx playwright install chromium --with-deps
+      - name: Browser interaction regression
+        run: node scripts/qa-phase2-browser.js
