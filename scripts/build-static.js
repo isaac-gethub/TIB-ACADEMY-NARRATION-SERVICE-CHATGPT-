@@ -14,7 +14,10 @@ if(fs.existsSync(audioSource)){
  const dest=path.join(output,'audio');fs.mkdirSync(dest,{recursive:true});
  for(const file of fs.readdirSync(audioSource)){
   if(/^lab\d{2}-section-[1-5]\.mp3$/.test(file)){
-   fs.copyFileSync(path.join(audioSource,file),path.join(dest,file));count++;
+   fs.copyFileSync(path.join(audioSource,file),path.join(dest,file));
+   // Preserve the original interactive lab players' root-relative MP3 URLs.
+   // Keep /audio/ copies for narrated lesson pages; do not regenerate audio.
+   fs.copyFileSync(path.join(audioSource,file),path.join(output,file));count+=2;
   }
  }
 }
