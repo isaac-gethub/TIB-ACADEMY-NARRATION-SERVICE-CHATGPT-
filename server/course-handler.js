@@ -5,7 +5,11 @@ const types={'.html':'text/html; charset=utf-8','.pdf':'application/pdf','.docx'
 const cookie='__Host-tib_course';
 function send(res,status,text){res.statusCode=status;res.setHeader('Content-Type','text/plain; charset=utf-8');res.end(text)}
 function getToken(req){const part=String(req.headers.cookie||'').split(';').map(x=>x.trim()).find(x=>x.startsWith(cookie+'='));return part?part.slice(cookie.length+1):''}
-function trustedOrigin(req){const o=req.headers.origin;const own='https://'+req.headers.host;return o===own||o==='https://tib-academy-course-portal-grcsweep.vercel.app'||/^https:\/\/tib-academy-course-portal-grcsweep-[a-z0-9]+\.vercel\.app$/.test(o||'')}
+function trustedOrigin(req){
+ const origins=new Set([...(config.origins||[]),process.env.VERCEL_URL,process.env.VERCEL_BRANCH_URL,process.env.VERCEL_PROJECT_PRODUCTION_URL].filter(Boolean).map(host=>host.startsWith('https://')?host:'https://'+host));
+ if(!process.env.VERCEL&&!origins.size)origins.add('https://'+req.headers.host);
+ return typeof req.headers.origin==='string'&&req.headers.origin!=='null'&&origins.has(req.headers.origin);
+}
 async function authorize(token){
  if(!token||token.length>8192||!/^[A-Za-z0-9._-]+$/.test(token))return 401;
  const headers={apikey:key,Authorization:'Bearer '+token};
@@ -19,14 +23,14 @@ async function authorize(token){
  return Array.isArray(rows)&&rows.some(r=>r.course===config.course&&r.is_active===true&&(!r.start_date||r.start_date<=today)&&(!r.expiry_date||r.expiry_date>=today))?200:403;
 }
 module.exports=async(req,res)=>{
- res.setHeader('Cache-Control','private, no-store');res.setHeader('Vercel-CDN-Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
+ res.setHeader('Cache-Control','private, no-store');res.setHeader('Vercel-CDN-Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
  try{
   const u=new URL(req.url,'https://'+req.headers.host);let resource=u.searchParams.get('resource');
   if(resource===null)resource=u.pathname.replace(/^\//,'');
   if(resource==='api/session'){
    if(req.method==='GET'||req.method==='HEAD'){res.statusCode=303;res.setHeader('Location','/login.html');return res.end()}if(req.method!=='POST')return send(res,405,'POST required');if(!trustedOrigin(req))return send(res,403,'Untrusted sign-in origin');
-   let body=req.body;if(typeof body==='string')body=Object.fromEntries(new URLSearchParams(body));
-   if(!body){let s='';for await(const chunk of req){s+=chunk;if(s.length>10000)return send(res,413,'Request too large')}body=Object.fromEntries(new URLSearchParams(s))}
+   let body=req.body;if(typeof body==='string')body=String(req.headers['content-type']||'').includes('application/json')?JSON.parse(body):Object.fromEntries(new URLSearchParams(body));
+   if(!body){let s='';for await(const chunk of req){s+=chunk;if(s.length>10000)return send(res,413,'Request too large')}body=String(req.headers['content-type']||'').includes('application/json')?JSON.parse(s):Object.fromEntries(new URLSearchParams(s))}
    const token=typeof body.access_token==='string'?body.access_token:'';const status=await authorize(token);if(status!==200)return send(res,status,status===403?'No active enrollment for this course.':'Could not verify course access.');
    res.setHeader('Set-Cookie',cookie+'='+token+'; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=3600');res.statusCode=303;res.setHeader('Location','/index.html');return res.end();
   }

@@ -7,7 +7,7 @@ function copy(dir,dest){for(const e of fs.readdirSync(dir,{withFileTypes:true}))
 copy(sweep?path.join(root,'public'):root,assets);
 fs.copyFileSync('server/course-handler.js',path.join(fn,'index.js'));
 fs.copyFileSync('server/course-login.html',path.join(assets,'login.html'));
-fs.writeFileSync(path.join(fn,'course-config.json'),JSON.stringify({course:sweep?'TIB-FULL-SWEEP':'TIB-SECURITY'}));
+fs.writeFileSync(path.join(fn,'course-config.json'),JSON.stringify({course:sweep?'TIB-FULL-SWEEP':'TIB-SECURITY',origins:[process.env.VERCEL_URL,process.env.VERCEL_BRANCH_URL,process.env.VERCEL_PROJECT_PRODUCTION_URL].filter(Boolean)}));
 fs.writeFileSync(path.join(fn,'.vc-config.json'),JSON.stringify({runtime:'nodejs22.x',handler:'index.js',launcherType:'Nodejs',shouldAddHelpers:true,maxDuration:60}));
 const routes=[];
 if(sweep){for(const name of ['health','speech']){const dir=path.join(out,'functions/api/'+name+'.func');fs.mkdirSync(dir,{recursive:true});fs.copyFileSync('api/'+name+'.js',path.join(dir,'index.js'));fs.writeFileSync(path.join(dir,'.vc-config.json'),JSON.stringify({runtime:'nodejs22.x',handler:'index.js',launcherType:'Nodejs',shouldAddHelpers:true,maxDuration:60}));routes.push({src:'/api/'+name,dest:'/api/'+name})}}

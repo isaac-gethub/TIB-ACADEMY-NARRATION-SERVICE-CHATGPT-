@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),http=require('node:http');
 const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'tib-course-auth-'));fs.mkdirSync(path.join(tmp,'assets'));
 fs.copyFileSync(path.join(__dirname,'../server/course-handler.js'),path.join(tmp,'index.js'));
-fs.writeFileSync(path.join(tmp,'course-config.json'),JSON.stringify({course:'TIB-SECURITY'}));
+fs.writeFileSync(path.join(tmp,'course-config.json'),JSON.stringify({course:'TIB-SECURITY',origins:['course-preview.vercel.app']}));
 for(const [name,content] of Object.entries({'index.html':'<body>PRIVATE LESSON</body>','login.html':'LOGIN','guide.pdf':'PRIVATE PDF','clip.mp3':'0123456789','trainee-skills-career-report.html':'PUBLIC REPORT'}))fs.writeFileSync(path.join(tmp,'assets',name),content);
 const native=global.fetch;
 global.fetch=async(url,options)=>{
@@ -27,7 +27,9 @@ try{
  assert.equal((await req('trainee-skills-career-report.html')).status,200);
  const recovery=await req('api/session');assert.equal(recovery.status,303);assert.equal(recovery.headers.get('location'),'/login.html');
  const badOrigin=await req('api/session',{method:'POST',headers:{origin:'https://attacker.example','content-type':'application/x-www-form-urlencoded'},body:'access_token=active'});assert.equal(badOrigin.status,403);
- const session=await req('api/session',{method:'POST',headers:{origin:'https://'+new URL(base).host,'content-type':'application/x-www-form-urlencoded'},body:'access_token=active'});assert.equal(session.status,303);const cookie=session.headers.get('set-cookie');for(const attr of ['Secure','HttpOnly','SameSite=Lax','Path=/'])assert.ok(cookie.includes(attr));
- const logout=await req('api/signout',{method:'POST',headers:{origin:'https://'+new URL(base).host}});assert.equal(logout.status,303);assert.match(logout.headers.get('set-cookie'),/Max-Age=0/);
+ const session=await req('api/session',{method:'POST',headers:{origin:'https://course-preview.vercel.app','content-type':'application/x-www-form-urlencoded'},body:'access_token=active'});assert.equal(session.status,303);const cookie=session.headers.get('set-cookie');for(const attr of ['Secure','HttpOnly','SameSite=Lax','Path=/'])assert.ok(cookie.includes(attr));
+ const nullOrigin=await req('api/session',{method:'POST',headers:{origin:'null','content-type':'application/json'},body:JSON.stringify({access_token:'active'})});assert.equal(nullOrigin.status,403);
+ const jsonSession=await req('api/session',{method:'POST',headers:{origin:'https://course-preview.vercel.app','content-type':'application/json'},body:JSON.stringify({access_token:'active'})});assert.equal(jsonSession.status,303);
+ const logout=await req('api/signout',{method:'POST',headers:{origin:'https://course-preview.vercel.app'}});assert.equal(logout.status,303);assert.match(logout.headers.get('set-cookie'),/Max-Age=0/);
  console.log('PASS: server handler denies anonymous/invalid/wrong-course/inactive/expired/future access, fails closed on outage, protects downloads/audio, supports ranges and secure session/sign-out. Fixture auth only.');
 }finally{server.close();global.fetch=native;fs.rmSync(tmp,{recursive:true,force:true})}})().catch(e=>{console.error(e);process.exitCode=1});
