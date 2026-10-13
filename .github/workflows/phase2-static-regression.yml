@@ -1,7 +1,7 @@
 name: Phase 2 Static Regression
 on:
   push:
-    branches: [phase2-enhancements-20261012, phase4-integration-20261013, phase4-release-ready-20261013]
+    branches: [phase2-enhancements-20261012, phase4-integration-20261013, phase4-release-ready-20261013, full-sweep-interviews-20261013]
   workflow_dispatch:
 jobs:
   validate:
@@ -16,7 +16,7 @@ jobs:
       - name: Check lab and narration assets
         run: node scripts/qa-phase2.js
       - name: Install browser test runtime
-        run: npm install --no-save playwright && npx playwright install chromium --with-deps
+        run: npm install --no-save playwright@1.62.1 && npx playwright install chromium --with-deps
       - name: Browser interaction regression
         run: node scripts/qa-phase2-browser.js
       - name: Phase 4 learner journey integration
@@ -30,3 +30,6 @@ jobs:
         run: node scripts/qa-course-login-browser.js
       - name: Verify built narration pages and protected audio routes
         run: node scripts/qa-built-narration.js
+
+      - name: Full Sweep lab assessments and progression
+        run: node scripts/qa-assessment.js
