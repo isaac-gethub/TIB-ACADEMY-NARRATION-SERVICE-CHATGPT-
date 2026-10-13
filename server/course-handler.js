@@ -1,0 +1,54 @@
+const fs=require('node:fs'),path=require('node:path'),{pipeline}=require('node:stream/promises');
+const config=require('./course-config.json'),base=path.join(__dirname,'assets');
+const sb='https://blfgwysgekfqhcafofhe.supabase.co',key='sb_publishable_ThLetpd4hj49fjce-kXoFA_v4ghwIqV';
+const types={'.html':'text/html; charset=utf-8','.pdf':'application/pdf','.docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.mp3':'audio/mpeg'};
+const cookie='__Host-tib_course';
+function send(res,status,text){res.statusCode=status;res.setHeader('Content-Type','text/plain; charset=utf-8');res.end(text)}
+function getToken(req){const part=String(req.headers.cookie||'').split(';').map(x=>x.trim()).find(x=>x.startsWith(cookie+'='));return part?part.slice(cookie.length+1):''}
+function trustedOrigin(req){const o=req.headers.origin;const own='https://'+req.headers.host;return o===own||o==='https://tib-academy-course-portal-grcsweep.vercel.app'||/^https:\/\/tib-academy-course-portal-grcsweep-[a-z0-9]+\.vercel\.app$/.test(o||'')}
+async function authorize(token){
+ if(!token||token.length>8192||!/^[A-Za-z0-9._-]+$/.test(token))return 401;
+ const headers={apikey:key,Authorization:'Bearer '+token};
+ const userResponse=await fetch(sb+'/auth/v1/user',{headers,signal:AbortSignal.timeout(10000)});
+ if(userResponse.status===401||userResponse.status===403)return 401;if(!userResponse.ok)return 503;
+ const user=await userResponse.json();if(typeof user.id!=='string')return 401;
+ const q=new URLSearchParams({select:'course,is_active,start_date,expiry_date',user_id:'eq.'+user.id,course:'eq.'+config.course});
+ const enrollmentResponse=await fetch(sb+'/rest/v1/enrollments?'+q,{headers,signal:AbortSignal.timeout(10000)});
+ if(!enrollmentResponse.ok)return 503;
+ const rows=await enrollmentResponse.json(),today=new Date().toISOString().slice(0,10);
+ return Array.isArray(rows)&&rows.some(r=>r.course===config.course&&r.is_active===true&&(!r.start_date||r.start_date<=today)&&(!r.expiry_date||r.expiry_date>=today))?200:403;
+}
+module.exports=async(req,res)=>{
+ res.setHeader('Cache-Control','private, no-store');res.setHeader('Vercel-CDN-Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
+ try{
+  const u=new URL(req.url,'https://'+req.headers.host);let resource=u.searchParams.get('resource');
+  if(resource===null)resource=u.pathname.replace(/^\//,'');
+  if(resource==='api/session'){
+   if(req.method!=='POST')return send(res,405,'POST required');if(!trustedOrigin(req))return send(res,403,'Untrusted sign-in origin');
+   let body=req.body;if(typeof body==='string')body=Object.fromEntries(new URLSearchParams(body));
+   if(!body){let s='';for await(const chunk of req){s+=chunk;if(s.length>10000)return send(res,413,'Request too large')}body=Object.fromEntries(new URLSearchParams(s))}
+   const token=typeof body.access_token==='string'?body.access_token:'';const status=await authorize(token);if(status!==200)return send(res,status,status===403?'No active enrollment for this course.':'Could not verify course access.');
+   res.setHeader('Set-Cookie',cookie+'='+token+'; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=3600');res.statusCode=303;res.setHeader('Location','/index.html');return res.end();
+  }
+  if(resource==='api/signout'){
+   if(req.method!=='POST')return send(res,405,'POST required');if(!trustedOrigin(req))return send(res,403,'Untrusted sign-out origin');
+   res.setHeader('Set-Cookie',cookie+'=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0');res.statusCode=303;res.setHeader('Location','/login.html');return res.end();
+  }
+  if(!['GET','HEAD'].includes(req.method))return send(res,405,'Method not allowed');
+  if(resource==='interactive-lab1')resource='lab01-interactive.html';if(!resource)resource='index.html';
+  if(resource.includes('..')||resource.includes('\\')||resource.includes('\0')||resource.startsWith('/')||!types[path.extname(resource).toLowerCase()])return send(res,404,'Not found');
+  const file=path.resolve(base,resource);if(!file.startsWith(base+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile())return send(res,404,'Not found');
+  if(!['login.html','trainee-skills-career-report.html'].includes(resource)){
+   const status=await authorize(getToken(req));
+   if(status!==200){if(status===401&&path.extname(resource)==='.html'){res.statusCode=303;res.setHeader('Location','/login.html');return res.end()}return send(res,status,status===403?'No active enrollment for this course.':status===503?'Course verification temporarily unavailable.':'Sign in required.')}
+  }
+  const stat=fs.statSync(file);res.setHeader('Content-Type',types[path.extname(file).toLowerCase()]);res.setHeader('Accept-Ranges','bytes');
+  if(file.endsWith('.html')){
+   let html=fs.readFileSync(file,'utf8');if(!['login.html','trainee-skills-career-report.html'].includes(resource)){const signout='<form action="/api/signout" method="post" style="margin:20px"><button type="submit">Sign out of this course</button></form>';html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,signout+'</body>'):html+signout;}
+   res.setHeader('Content-Length',Buffer.byteLength(html));res.statusCode=200;return res.end(req.method==='HEAD'?undefined:html);
+  }
+  let start=0,end=stat.size-1;
+  if(req.headers.range){const m=/^bytes=(\d*)-(\d*)$/.exec(req.headers.range);if(!m||(!m[1]&&!m[2])){res.setHeader('Content-Range','bytes */'+stat.size);return send(res,416,'Invalid range')}if(!m[1])start=Math.max(0,stat.size-Number(m[2]));else{start=Number(m[1]);if(m[2])end=Math.min(end,Number(m[2]))}if(start>end||start>=stat.size){res.setHeader('Content-Range','bytes */'+stat.size);return send(res,416,'Invalid range')}res.statusCode=206;res.setHeader('Content-Range','bytes '+start+'-'+end+'/'+stat.size)}else res.statusCode=200;
+  res.setHeader('Content-Length',end-start+1);if(req.method==='HEAD')return res.end();await pipeline(fs.createReadStream(file,{start,end}),res);
+ }catch(e){console.error('Course authorization/serving failed:',e.name);if(!res.headersSent)send(res,503,'Course verification temporarily unavailable.');else res.end()}
+};
