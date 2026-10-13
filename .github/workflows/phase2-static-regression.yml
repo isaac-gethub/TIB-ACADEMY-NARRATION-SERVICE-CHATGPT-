@@ -28,3 +28,5 @@ jobs:
         run: node scripts/build-secure.js
       - name: Actual login browser origin regression
         run: node scripts/qa-course-login-browser.js
+      - name: Verify built narration pages and protected audio routes
+        run: node scripts/qa-built-narration.js
