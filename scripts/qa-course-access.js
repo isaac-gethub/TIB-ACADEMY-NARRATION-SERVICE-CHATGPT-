@@ -25,6 +25,7 @@ try{
  const audio=await req('clip.mp3',{headers:{cookie:'__Host-tib_course=active',range:'bytes=2-5'}});assert.equal(audio.status,206);assert.equal(await audio.text(),'2345');
  assert.equal((await req('../index.js',{headers:{cookie:'__Host-tib_course=active'}})).status,404);
  assert.equal((await req('trainee-skills-career-report.html')).status,200);
+ const recovery=await req('api/session');assert.equal(recovery.status,303);assert.equal(recovery.headers.get('location'),'/login.html');
  const badOrigin=await req('api/session',{method:'POST',headers:{origin:'https://attacker.example','content-type':'application/x-www-form-urlencoded'},body:'access_token=active'});assert.equal(badOrigin.status,403);
  const session=await req('api/session',{method:'POST',headers:{origin:'https://'+new URL(base).host,'content-type':'application/x-www-form-urlencoded'},body:'access_token=active'});assert.equal(session.status,303);const cookie=session.headers.get('set-cookie');for(const attr of ['Secure','HttpOnly','SameSite=Lax','Path=/'])assert.ok(cookie.includes(attr));
  const logout=await req('api/signout',{method:'POST',headers:{origin:'https://'+new URL(base).host}});assert.equal(logout.status,303);assert.match(logout.headers.get('set-cookie'),/Max-Age=0/);
