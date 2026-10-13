@@ -9,3 +9,15 @@
 - The external academy portal currently links to the Full Sweep **production homepage**, not to this development branch. Existing Supabase enrollment is untouched. Do not claim new lab-level authorization enforcement without authenticated preview tests.
 - Final integration checks: static output includes Lab 47, homepage link resolves in development preview, notes/quiz/export work, original 46 labs and audio pass regression, portal handoff is checked in authenticated test environment.
 - No merge to main, production promotion, portal rewrite, or cross-course coupling.
+
+
+## Narration route repair — 2026-10-13
+Sponsor screenshots showed missing-page errors for Full Sweep narration and the GRC companion link.
+- Restored missing Full Sweep lab01.html using the original five-stage content and browser speech. Labs 1–2 have no new recorded MP3s; Lab 3 uses existing recordings.
+- Normalized short/extensionless lab routes and audio aliases behind the same server authorization.
+- Corrected GRC companion links to the restored Full Sweep development lesson; no GRC Chapter 1 prerecorded narration is claimed.
+- Actual private-build regression verified narration pages for Labs 1–3, their aliases, recorded Lab 3 range responses and all 220 original MP3 hashes at root and /audio/ paths.
+- Full Sweep regression SUCCESS: https://github.com/isaac-gethub/TIB-ACADEMY-NARRATION-SERVICE-CHATGPT-/actions/runs/38462103084
+- GRC regression SUCCESS: https://github.com/isaac-gethub/tib-grc-master-course/actions/runs/38462160254
+- Updated portal READY: https://tib-academy-course-portal-grcsweep-feparklr1.vercel.app/
+- Live audible playback remains for sponsor retest. Existing content and recordings are preserved. Production unchanged.
