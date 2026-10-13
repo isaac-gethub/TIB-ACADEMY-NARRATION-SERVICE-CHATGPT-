@@ -1,7 +1,7 @@
 name: Phase 2 Static Regression
 on:
   push:
-    branches: [phase2-enhancements-20261012]
+    branches: [phase2-enhancements-20261012, phase4-integration-20261013]
   workflow_dispatch:
 jobs:
   validate:
@@ -19,3 +19,6 @@ jobs:
         run: npm install --no-save playwright && npx playwright install chromium --with-deps
       - name: Browser interaction regression
         run: node scripts/qa-phase2-browser.js
+      - name: Phase 4 learner journey integration
+        if: github.ref_name == 'phase4-integration-20261013'
+        run: node scripts/qa-phase4-browser.js
