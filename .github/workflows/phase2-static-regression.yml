@@ -26,3 +26,5 @@ jobs:
         run: node scripts/qa-course-access.js
       - name: Verify private course packaging
         run: node scripts/build-secure.js
+      - name: Actual login browser origin regression
+        run: node scripts/qa-course-login-browser.js
