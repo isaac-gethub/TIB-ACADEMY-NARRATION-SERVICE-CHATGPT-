@@ -22,3 +22,9 @@ const {chromium}=require('playwright');const {spawn}=require('child_process');
  }
  console.log(JSON.stringify({result:'PASS',browserTests:results},null,2));
  }catch(e){console.error(JSON.stringify({result:'FAIL',completed:results,error:String(e)},null,2));process.exitCode=1}finally{if(browser)await browser.close();server.kill();}})();
+
+// Phase 3 branch only: run independent advanced-practical browser regression after Phase 2 tests.
+if(require('fs').existsSync(require('path').join(__dirname,'..','PHASE3_SCOPE.md'))){
+ const r=require('child_process').spawnSync(process.execPath,[require('path').join(__dirname,'qa-phase3-browser.js')],{stdio:'inherit'});
+ if(r.status!==0)process.exitCode=1;
+}
