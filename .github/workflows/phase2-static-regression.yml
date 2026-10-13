@@ -1,0 +1,32 @@
+name: Phase 2 Static Regression
+on:
+  push:
+    branches: [phase2-enhancements-20261012, phase4-integration-20261013, phase4-release-ready-20261013]
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build static site without narration API
+        run: node scripts/build-static.js
+      - name: Check lab and narration assets
+        run: node scripts/qa-phase2.js
+      - name: Install browser test runtime
+        run: npm install --no-save playwright && npx playwright install chromium --with-deps
+      - name: Browser interaction regression
+        run: node scripts/qa-phase2-browser.js
+      - name: Phase 4 learner journey integration
+        if: github.ref_name == 'phase4-integration-20261013' || github.ref_name == 'phase4-release-ready-20261013'
+        run: node scripts/qa-phase4-browser.js
+      - name: Server course access regression
+        run: node scripts/qa-course-access.js
+      - name: Verify private course packaging
+        run: node scripts/build-secure.js
+      - name: Actual login browser origin regression
+        run: node scripts/qa-course-login-browser.js
+      - name: Verify built narration pages and protected audio routes
+        run: node scripts/qa-built-narration.js
