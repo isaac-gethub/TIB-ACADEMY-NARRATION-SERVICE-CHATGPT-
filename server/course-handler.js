@@ -40,6 +40,10 @@ module.exports=async(req,res)=>{
   }
   if(!['GET','HEAD'].includes(req.method))return send(res,405,'Method not allowed');
   if(resource==='interactive-lab1')resource='lab01-interactive.html';if(!resource)resource='index.html';
+  const labRoute=/^lab(\d{1,2})(-interactive)?(?:\.html)?\/?$/.exec(resource);
+  if(labRoute)resource='lab'+labRoute[1].padStart(2,'0')+(labRoute[2]||'')+'.html';
+  const audioRoute=/^(audio\/)?lab(\d{1,2})-section-([1-5])\.mp3$/.exec(resource);
+  if(audioRoute)resource=(audioRoute[1]||'')+'lab'+audioRoute[2].padStart(2,'0')+'-section-'+audioRoute[3]+'.mp3';
   if(resource.includes('..')||resource.includes('\\')||resource.includes('\0')||resource.startsWith('/')||!types[path.extname(resource).toLowerCase()])return send(res,404,'Not found');
   const file=path.resolve(base,resource);if(!file.startsWith(base+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile())return send(res,404,'Not found');
   if(!['login.html','trainee-skills-career-report.html'].includes(resource)){
