@@ -3,6 +3,7 @@ const config=require('./course-config.json'),base=path.join(__dirname,'assets');
 const sb='https://blfgwysgekfqhcafofhe.supabase.co',key='sb_publishable_ThLetpd4hj49fjce-kXoFA_v4ghwIqV';
 const types={'.html':'text/html; charset=utf-8','.pdf':'application/pdf','.docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.mp3':'audio/mpeg'};
 const cookie='__Host-tib_course';
+const assessment=config.assessmentEnabled?require('./assessment'):null;
 function send(res,status,text){res.statusCode=status;res.setHeader('Content-Type','text/plain; charset=utf-8');res.end(text)}
 function getToken(req){const part=String(req.headers.cookie||'').split(';').map(x=>x.trim()).find(x=>x.startsWith(cookie+'='));return part?part.slice(cookie.length+1):''}
 function trustedOrigin(req){
@@ -38,6 +39,14 @@ module.exports=async(req,res)=>{
    if(req.method!=='POST')return send(res,405,'POST required');if(!trustedOrigin(req))return send(res,403,'Untrusted sign-out origin');
    res.setHeader('Set-Cookie',cookie+'=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0');res.statusCode=303;res.setHeader('Location','/login.html');return res.end();
   }
+  if(resource==='api/assessment'){
+   if(!config.assessmentEnabled)return send(res,503,'Assessment persistence is not enabled for this deployment.');
+   if(!['GET','POST'].includes(req.method))return send(res,405,'Method not allowed');
+   if(req.method==='POST'&&!trustedOrigin(req))return send(res,403,'Untrusted assessment origin');
+   const status=await authorize(getToken(req));if(status!==200)return send(res,status,'Active course sign-in required.');
+   let body;if(req.method==='POST'){let s='';for await(const chunk of req){s+=chunk;if(s.length>40000)return send(res,413,'Request too large')}try{body=req.body||JSON.parse(s);if(typeof body==='string')body=JSON.parse(body)}catch{return send(res,400,'Invalid JSON')}}
+   return await assessment.handle(req,res,getToken(req),body);
+  }
   if(!['GET','HEAD'].includes(req.method))return send(res,405,'Method not allowed');
   if(resource==='interactive-lab1')resource='lab01-interactive.html';if(!resource)resource='index.html';
   const labRoute=/^lab(\d{1,2})(-interactive)?(?:\.html)?\/?$/.exec(resource);
@@ -50,9 +59,11 @@ module.exports=async(req,res)=>{
    const status=await authorize(getToken(req));
    if(status!==200){if(status===401&&path.extname(resource)==='.html'){res.statusCode=303;res.setHeader('Location','/login.html');return res.end()}return send(res,status,status===403?'No active enrollment for this course.':status===503?'Course verification temporarily unavailable.':'Sign in required.')}
   }
+  const chapter=assessment?assessment.chapterOf(resource):0;
+  if(config.assessmentEnabled&&chapter){const state=await assessment.rpc(getToken(req),'state');if(!assessment.unlocked(state,chapter)){res.statusCode=303;res.setHeader('Location','/assessment.html?chapter='+chapter);return res.end()}}
   const stat=fs.statSync(file);res.setHeader('Content-Type',types[path.extname(file).toLowerCase()]);res.setHeader('Accept-Ranges','bytes');
   if(file.endsWith('.html')){
-   let html=fs.readFileSync(file,'utf8');if(!['login.html','trainee-skills-career-report.html'].includes(resource)){const signout='<form action="/api/signout" method="post" style="margin:20px"><button type="submit">Sign out of this course</button></form>';html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,signout+'</body>'):html+signout;}
+   let html=fs.readFileSync(file,'utf8');if(!['login.html','trainee-skills-career-report.html'].includes(resource)){const signout='<form action="/api/signout" method="post" style="margin:20px"><button type="submit">Sign out of this course</button></form>';html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,(chapter?'<p style="margin:20px"><a href="/assessment.html?chapter='+chapter+'">Lab interview practice and knowledge check</a></p>':'')+signout+'</body>'):html+signout;}
    res.setHeader('Content-Length',Buffer.byteLength(html));res.statusCode=200;return res.end(req.method==='HEAD'?undefined:html);
   }
   let start=0,end=stat.size-1;
@@ -60,3 +71,4 @@ module.exports=async(req,res)=>{
   res.setHeader('Content-Length',end-start+1);if(req.method==='HEAD')return res.end();await pipeline(fs.createReadStream(file,{start,end}),res);
  }catch(e){console.error('Course authorization/serving failed:',e.name);if(!res.headersSent)send(res,503,'Course verification temporarily unavailable.');else res.end()}
 };
+
