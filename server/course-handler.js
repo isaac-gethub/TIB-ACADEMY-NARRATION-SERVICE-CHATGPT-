@@ -24,7 +24,7 @@ module.exports=async(req,res)=>{
   const u=new URL(req.url,'https://'+req.headers.host);let resource=u.searchParams.get('resource');
   if(resource===null)resource=u.pathname.replace(/^\//,'');
   if(resource==='api/session'){
-   if(req.method!=='POST')return send(res,405,'POST required');if(!trustedOrigin(req))return send(res,403,'Untrusted sign-in origin');
+   if(req.method==='GET'||req.method==='HEAD'){res.statusCode=303;res.setHeader('Location','/login.html');return res.end()}if(req.method!=='POST')return send(res,405,'POST required');if(!trustedOrigin(req))return send(res,403,'Untrusted sign-in origin');
    let body=req.body;if(typeof body==='string')body=Object.fromEntries(new URLSearchParams(body));
    if(!body){let s='';for await(const chunk of req){s+=chunk;if(s.length>10000)return send(res,413,'Request too large')}body=Object.fromEntries(new URLSearchParams(s))}
    const token=typeof body.access_token==='string'?body.access_token:'';const status=await authorize(token);if(status!==200)return send(res,status,status===403?'No active enrollment for this course.':'Could not verify course access.');
